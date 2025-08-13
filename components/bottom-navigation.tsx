@@ -15,7 +15,7 @@ const navigationItems = [
     id: "relatorio",
     label: "Relatório",
     icon: BarChart3,
-    path: "/health-reports",
+    path: "/relatorio",
   },
   {
     id: "home",
@@ -28,13 +28,13 @@ const navigationItems = [
     id: "perfil",
     label: "Perfil",
     icon: User,
-    path: "/profile",
+    path: "/perfil",
   },
   {
     id: "xixi",
     label: "Xixi",
     icon: Droplets,
-    path: "/urine-log",
+    path: "/urina",
   },
 ]
 

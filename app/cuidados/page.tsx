@@ -45,7 +45,7 @@ const iconOptions = [
 ]
 
 export default function CuidadosPage() {
-  const { tasks, beneBits, updateTask } = useBenebits()
+  const { tasks, beneBits, updateTask, addTask, deleteTask } = useBenebits()
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [newTask, setNewTask] = useState({
     title: "",
@@ -82,7 +82,7 @@ export default function CuidadosPage() {
     }
   }
 
-  const addTask = (e: React.FormEvent) => {
+  const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault()
     if (!newTask.title.trim()) return
 
@@ -91,28 +91,22 @@ export default function CuidadosPage() {
       title: newTask.title,
       icon: newTask.icon,
       completed: false,
-      rewarded: false, // New tasks start as not rewarded
+      rewarded: false,
       reward: 10,
       repetitions: Number(newTask.repetitions) || 1,
       currentCount: 0,
     }
 
-    // The task will be added through the store's state update
+    // Reset form
     setNewTask({ title: "", icon: DEFAULT_ICON, repetitions: 1 })
     setIsAddOpen(false)
     
-    // This is a simplified version - in a real app, you'd have an addTask method in the store
-    // For now, we'll just update the tasks directly in localStorage
-    const updatedTasks = [...tasks, task]
-    localStorage.setItem('bene:tasks', JSON.stringify(updatedTasks))
-    window.dispatchEvent(new Event('storage'))
+    // Add the task through the store
+    addTask(task)
   }
 
-  const deleteTask = (id: string) => {
-    // In a real implementation, you'd have a deleteTask method in the store
-    const updatedTasks = tasks.filter(task => task.id !== id)
-    localStorage.setItem('bene:tasks', JSON.stringify(updatedTasks))
-    window.dispatchEvent(new Event('storage'))
+  const handleDeleteTask = (id: string) => {
+    deleteTask(id)
   }
 
   const completed = tasks.filter((t) => t.completed).length
@@ -187,7 +181,7 @@ export default function CuidadosPage() {
                 </div>
                 <Button
                   disabled={!newTask.title.trim()}
-                  onClick={addTask}
+                  onClick={handleAddTask}
                   className="w-full bg-purple-600 hover:bg-purple-700"
                 >
                   Adicionar
@@ -242,7 +236,7 @@ export default function CuidadosPage() {
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation()
-                    deleteTask(task.id)
+                    handleDeleteTask(task.id)
                   }}
                   className="text-red-500 hover:text-red-700 hover:bg-red-50"
                 >

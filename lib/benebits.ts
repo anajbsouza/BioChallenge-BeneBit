@@ -150,6 +150,18 @@ class BenebitsStore {
     this.notify();
   }
 
+  public addTask(task: Task) {
+    this.tasks = [...this.tasks, task];
+    this.saveTasks();
+    this.notify();
+  }
+
+  public deleteTask(id: string) {
+    this.tasks = this.tasks.filter(task => task.id !== id);
+    this.saveTasks();
+    this.notify();
+  }
+
   private saveTasks() {
     localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(this.tasks));
   }
@@ -215,6 +227,8 @@ export function useBenebits() {
   return {
     ...state,
     updateTask: benebitsStore.updateTask.bind(benebitsStore),
+    addTask: benebitsStore.addTask.bind(benebitsStore),
+    deleteTask: benebitsStore.deleteTask.bind(benebitsStore),
     addBenebits: benebitsStore.addBenebits.bind(benebitsStore),
     reset: benebitsStore.reset.bind(benebitsStore)
   };
